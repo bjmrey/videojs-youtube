@@ -22,7 +22,7 @@ THE SOFTWARE. */
 /*global define, YT*/
 (function (root, factory) {
   if(typeof exports==='object' && typeof module!=='undefined') {
-    var videojs = require('video.js');
+    var videojs = require('../../video.js/dist/video.cjs.js');
     module.exports = factory(videojs.default || videojs);
   } else if(typeof define === 'function' && define.amd) {
     define(['videojs'], function(videojs){
@@ -195,9 +195,11 @@ THE SOFTWARE. */
         playerVars.playlist = this.options_.playlist;
       }
 
-      if (typeof this.options_.playsinline !== 'undefined') {
-        playerVars.playsinline = this.options_.playsinline;
-      }
+      // When 'playsinline' is set to 1, VideoJS takes it as a boolean and outputs true
+      // The Youtube API works with '1', not with 'true', so we need to force it
+      if (typeof this.options_.playsinline !== 'undefined' && this.options_.playsinline == true) {
+        playerVars.playsinline = '1';
+      } 
 
       if (typeof this.options_.rel !== 'undefined') {
         playerVars.rel = this.options_.rel;
